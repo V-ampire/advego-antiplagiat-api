@@ -39,4 +39,3 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 Odit amet deserunt consequatur dicta, impedit nobis optio enim praesentium minima cupiditate 
 dolores officiis atque officia dolor, non molestias repellat, omnis accusamus?
 """
-

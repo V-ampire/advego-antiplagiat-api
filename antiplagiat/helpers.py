@@ -28,7 +28,6 @@ def clean_text(text: str) -> str:
 	Если в тексте есть переносы строк (абзацы, списки и т. п.) они заменяются на символ "\n" без кавычек.
 	"""
 	stop_list = ['‣', '⁃', '⁌', '⁍', '∙', '◦', '§', '¶']
-	text = text.encode('utf-8').decode('utf-8')
 	for char in stop_list:
 		text = text.replace(char, '\n')
 	return text
