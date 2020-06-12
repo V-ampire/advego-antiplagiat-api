@@ -10,7 +10,7 @@ class Antiplagiat(object):
 	"""
 	Api для доступа к системе антиплагиата advego.ru.
 	"""
-	_request_count = count()
+	_request_count = count(1)
 
 	API_URL = 'https://api.advego.com/json/antiplagiat/'
 
@@ -74,11 +74,9 @@ class Antiplagiat(object):
 		if not headers:
 			headers = {}
 		headers['User-Agent'] = "Advego.Antiplagiat.API/Python"
-		data = self._prepare_params(method, params)
+		data = self.prepare_params(method, params)
 		response = requests.post(f'{self.API_URL}{url}', data=data, headers=headers)
-		if response.status_code >= 400:
-			pass
-			#do smth
+		response.raise_for_status()
 		return self.process_response(response.json())
 
 	def process_response(self, response: Dict) -> Dict:
@@ -87,37 +85,11 @@ class Antiplagiat(object):
 		:param response: Словарь с ответом по протоколу json-rpc 2.0.
 		"""
 		result = response.get('result')
+		if not result:
+			raise exceptions.APIException(f'Неизвестный формат ответа: {response}')
 		if result.get('error'):
 			self.raise_error(result.get('error'))
 		return result
-
-	def raise_error(self, error: str) -> Dict:
-		"""
-		Обработка ошибок от антиплагиата. Выбрасывает исключение соответствующее коду ошибки.
-		Если код не соответствует ниодной ошибке то выбрасывает APIException.
-		:param error: Код ошибки.
-		"""
-		if error == '-1':
-			raise exceptions.CharAccountError()
-		if error == '-2':
-			raise exceptions.AccountError()
-		if error == '-5':
-			raise exceptions.DatabaseError()
-		if error == '-10':
-			raise exceptions.TextKeyError()
-		if error == '-11':
-			raise exceptions.TokenError()
-		if error == '-13':
-			raise exceptions.TextError()
-		if error == '-14':
-			raise exceptions.TitleError()
-		if error == '-17':
-			raise exceptions.AddCheckError()
-		if error == '-21':
-			raise exceptions.TextNotFoundError()
-		if error == '-67':
-			raise exceptions.NotEnoughSymbolsError()
-		raise exceptions.APIException(f'Ошибка API advego антиплагиат: {error}')
 
 	def prepare_params(self, method: str, params: Dict) -> Dict:
 		"""
@@ -125,7 +97,35 @@ class Antiplagiat(object):
 		:param method: Название метода.
 		:param params: Параметры запроса.
 		"""
-		id_ = self._request_count()
+		id_ = next(self._request_count)
 		params['token'] = self.token
-
 		return {"jsonrpc": "2.0", "method": method, "params": params, "id": id_ }
+
+	def raise_error(self, error_code: Union[str, int]):
+		"""
+		Обработка ошибок от антиплагиата. Выбрасывает исключение соответствующее коду ошибки.
+		Если код не соответствует ниодной ошибке то выбрасывает APIException.
+		:param error: Код ошибки.
+		"""
+		error_code = str(error_code)
+		if error_code == '-1':
+			raise exceptions.CharAccountError()
+		if error_code == '-2':
+			raise exceptions.AccountError()
+		if error_code == '-5':
+			raise exceptions.DatabaseError()
+		if error_code == '-10':
+			raise exceptions.TextKeyError()
+		if error_code == '-11':
+			raise exceptions.TokenError()
+		if error_code == '-13':
+			raise exceptions.TextError()
+		if error_code == '-14':
+			raise exceptions.TitleError()
+		if error_code == '-17':
+			raise exceptions.AddCheckError()
+		if error_code == '-21':
+			raise exceptions.TextNotFoundError()
+		if error_code == '-67':
+			raise exceptions.NotEnoughSymbolsError()
+		raise exceptions.APIException(f'Ошибка API advego антиплагиат: {error_code}')
