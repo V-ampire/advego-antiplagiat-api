@@ -36,7 +36,7 @@ class Antiplagiat(object):
 			params['ignore_rules'] = ignore_rules
 		return self.process_rpc('add', 'unique_text_add', params)
 
-	def unique_check(self, key: str, agent: str, report_json: int=1, get_text: bool=False,) -> Dict:
+	def unique_check(self, key: str, agent: str=None, report_json: int=1, get_text: bool=False,) -> Dict:
 		"""
 		Возвращает состояние проверки и отчет, если проверка выполнена.
 		:param key: идентификатор проверки, полученный при добавлении;
@@ -49,10 +49,11 @@ class Antiplagiat(object):
 		"""
 		params = {
 			'key': key,
-			'agent': agent,
 			'report_json': report_json,
 			'get_text': get_text
 		}
+		if agent:
+			params['agent'] = agent
 		return self.process_rpc('get', 'unique_check', params)
 
 
@@ -75,7 +76,8 @@ class Antiplagiat(object):
 			headers = {}
 		headers['User-Agent'] = "Advego.Antiplagiat.API/Python"
 		data = self.prepare_params(method, params)
-		response = requests.post(f'{self.API_URL}{url}', data=data, headers=headers)
+		print(data)
+		response = requests.post(f'{self.API_URL}{url}', json=data, headers=headers)
 		response.raise_for_status()
 		return self.process_response(response.json())
 
