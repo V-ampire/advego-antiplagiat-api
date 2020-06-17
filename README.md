@@ -7,6 +7,41 @@
 ## Установка
 
 
+## Пример использования
+```
+from antiplagiat import Antiplagiat
+
+import time
+
+
+TOKEN = os.getenv('ADVEGO_TOKEN')
+
+api = Antiplagiat(TOKEN)
+
+with open('example.txt', 'r') as fp:
+	text = fp.read()
+
+
+result = api.unique_text_add(text)
+key = result['key']
+
+while True:
+	# дадим некоторое время на проверку
+	time.sleep(200)
+	result = api.unique_check(key)
+	if result['status'] == 'done':
+		print('Done!')
+		# сделать чтото с отчетом
+		return
+	elif result['status'] == 'error':
+		print(f'Error: {result}')
+		return
+	elif result['status'] == 'not found':
+		print('Not found!')
+		return
+	else:
+		print('In progress...')
+```
 
 ## Реализованные методы
 
