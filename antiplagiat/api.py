@@ -76,7 +76,6 @@ class Antiplagiat(object):
 			headers = {}
 		headers['User-Agent'] = "Advego.Antiplagiat.API/Python"
 		data = self.prepare_params(method, params)
-		print(data)
 		response = requests.post(f'{self.API_URL}{url}', json=data, headers=headers)
 		response.raise_for_status()
 		return self.process_response(response.json())
@@ -89,7 +88,7 @@ class Antiplagiat(object):
 		result = response.get('result')
 		if not result:
 			raise exceptions.APIException(f'Неизвестный формат ответа: {response}')
-		if result.get('error'):
+		if isinstance(result, Dict) and result.get('error'):
 			self.raise_error(result.get('error'))
 		return result
 
