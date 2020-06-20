@@ -102,7 +102,6 @@ key = result['key']
 В случае ошибки будет выброшено исключение, см. [стандартные исключения](#exceptions).
 
 
-
 **unique_check(key, agent=None, report_json=1, get_text=False)**
 
 Возвращает состояние проверки и [отчет](#report), если проверка выполнена.
@@ -128,7 +127,6 @@ key = result['key']
 - `{"msg": "", "status": "not found"}` - проверка с данным ключом не найдена.
 
 
-
 **unique_recheck(key)**
 
 Запускает новую проверку ранее добавленного текста. При этом удаляет предыдущие проверки из очереди.
@@ -140,7 +138,6 @@ key = result['key']
 в случает успеха возвращает `1`.
 
 В случае ошибки будет выброшено исключение, см. [стандартные исключения](#exceptions).
-
 
 
 **unique_get_text(key)**
@@ -163,9 +160,9 @@ key = result['key']
 Формат возвращаемого отчета:
 ```
 {
-	"status": "done",
-	"report": {
-		"layers_by_domain": [
+    "status": "done",
+    "report": {
+        "layers_by_domain": [
             {
                 "rewrite": 33,
                 "equality": 19,
@@ -246,7 +243,6 @@ key = result['key']
 }
 ```
 
-
 Расшифровка:
 
 **layers_by_domain** - найденные страницы с совпадениями, сгруппированные по доменам (если найдено несколько страниц на одном сайте),
@@ -287,6 +283,29 @@ key = result['key']
 Также `AdvanceReport` предоставляет атрибуты `uniqueness` и `originality`, соответствующие значениям уникальности и оригинальности текста, подробнее см. [как считается уникальность текста](https://advego.com/blog/read/faq_plagiatus/1298909/all1/).
 
 
+### Методы AdvanceReport
+
+
+**words_by_numbers(numbers)**
+
+Возвращает слова по номерам в тексте.
+
+Параметры:
+
+**numbers** - список номеров слов.
+
+
+**save_as_json(file_path, indent=4)**
+
+Сохранить отчет в json. Будет сохранен словарь, переданный при инициализации.
+
+Параметры:
+
+**file_path** - путь до файла.
+
+**indent** - размер отступов.
+
+
 Пример:
 ```
 from antiplagiat import Antiplagiat, AdvanceReport
@@ -296,21 +315,21 @@ TOKEN = os.getenv('ADVEGO_TOKEN')
 
 api = Antiplagiat(TOKEN)
 
+text = """some text"""
+
 # ... отправляем текст на проверку и получаем ключ key
 
 result = api.unique_check(key)
 
+adv_report = AdvanceReport(result.get('report'), text)
 
-result = api.unique_text_add(text)
-key = result['key']
+print(f'Уникальность текста {adv_report.uniqueness}/{adv_report.originality}')
 
-while True:
-    # дадим некоторое время на проверку
-    time.sleep(200)
-
+print('Найденные источники:')
+for domain in adv_report.layers_by_domain:
+    for layer in domain.layers:
+        print(layer.uri)
 ```
-
-
 
 
 <a name="exceptions"></a>
