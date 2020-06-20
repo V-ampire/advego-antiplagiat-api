@@ -29,28 +29,28 @@ TOKEN = os.getenv('ADVEGO_TOKEN')
 api = Antiplagiat(TOKEN)
 
 with open('example.txt', 'r') as fp:
-	text = fp.read()
+    text = fp.read()
 
 
 result = api.unique_text_add(text)
 key = result['key']
 
 while True:
-	# дадим некоторое время на проверку
-	time.sleep(200)
-	result = api.unique_check(key)
-	if result['status'] == 'done':
-		print('Done!')
-		# сделать чтото с отчетом
-		return
-	elif result['status'] == 'error':
-		print(f'Error: {result}')
-		return
-	elif result['status'] == 'not found':
-		print('Not found!')
-		return
-	else:
-		print('In progress...')
+    # дадим некоторое время на проверку
+    time.sleep(200)
+    result = api.unique_check(key)
+    if result['status'] == 'done':
+        print('Done!')
+        # сделать чтото с отчетом
+        return
+    elif result['status'] == 'error':
+        print(f'Error: {result}')
+        return
+    elif result['status'] == 'not found':
+        print('Not found!')
+        return
+    else:
+        print('In progress...')
 ```
 
 ## Реализованные методы
@@ -88,9 +88,9 @@ Python — высокоуровневый язык программирован�
 """
 
 ignore_rules = [
-	domain_rule('ru.wikipedia.org'),
-	url_rule('https://ru.wikipedia.org/wiki/Python'),
-	regex_rule('.*wikipedia\\.org')
+    domain_rule('ru.wikipedia.org'),
+    url_rule('https://ru.wikipedia.org/wiki/Python'),
+    regex_rule('.*wikipedia\\.org')
 ]
 
 result = api.unique_text_add(text, ignore_rules=ignore_rules)
@@ -166,83 +166,83 @@ key = result['key']
 	"status": "done",
 	"report": {
 		"layers_by_domain": [
-			{
-				"rewrite": 33,
-				"equality": 19,
-				"layers": [
-					{
-						"equality": 19,
-						"rewrite": 33,
-						"uri": "https://site/",
-						"words": [
-							7,
-							30,
-							31,
-							32
-						],
-						"shingles": [
-							31,
-							32,
-							33,
-							34,
-							35,
-							36,
-							37,
-							38
-						]
-					},
-				],
-			}
-		]
-		"len": 1050,
-		"bad_words": [],
-		"equal_words": [
-			0,
-			1,
-			3,
-			5,
-			7,
-			15,
-			19,
-			20,
-			22,
-			24,
-			25,
-			27,
-			28,
-			30
-		],
-		"word_count": 154,
-		"lang": "russian",
-		"error_pages": 0,
-		"rewrite": 82,
-		"progress": 100,
-		"text_fragments": [
-			"",
-			"Слово1",
-			" ",
-			"Слово2",
-			" ",
-			"Слово3",
-			" ",
-			"Слово4",
-			" ",
-			"Слово5",
-			". "
-		],
-		"captchas": 0,
-		"found_pages": 11,
-		"checked_pages": 48,
-		"equal_shingles": [
-			31,
-			32,
-			36,
-			37,
-			38,
-			40
-		],
-		"checked_phrases": 8,
-	},
+            {
+                "rewrite": 33,
+                "equality": 19,
+                "layers": [
+                    {
+                        "equality": 19,
+                        "rewrite": 33,
+                        "uri": "https://site/",
+                        "words": [
+                            7,
+                            30,
+                            31,
+                            32
+                        ],
+                        "shingles": [
+                            31,
+                            32,
+                            33,
+                            34,
+                            35,
+                            36,
+                            37,
+                            38
+                        ]
+                    },
+            	],
+            }
+        ]
+        "len": 1050,
+        "bad_words": [],
+        "equal_words": [
+            0,
+            1,
+            3,
+            5,
+            7,
+            15,
+            19,
+            20,
+            22,
+            24,
+            25,
+            27,
+            28,
+            30
+        ],
+        "word_count": 154,
+        "lang": "russian",
+        "error_pages": 0,
+        "rewrite": 82,
+        "progress": 100,
+        "text_fragments": [
+            "",
+            "Слово1",
+            " ",
+            "Слово2",
+            " ",
+            "Слово3",
+            " ",
+            "Слово4",
+            " ",
+            "Слово5",
+            ". "
+        ],
+        "captchas": 0,
+        "found_pages": 11,
+        "checked_pages": 48,
+        "equal_shingles": [
+            31,
+            32,
+            36,
+            37,
+            38,
+            40
+        ],
+        "checked_phrases": 8,
+    },
 }
 ```
 
@@ -305,8 +305,8 @@ result = api.unique_text_add(text)
 key = result['key']
 
 while True:
-	# дадим некоторое время на проверку
-	time.sleep(200)
+    # дадим некоторое время на проверку
+    time.sleep(200)
 
 ```
 
