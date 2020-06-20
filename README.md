@@ -4,6 +4,9 @@
 
 Библиотека для работы с сервисом [антиплагиата](https://advego.com/v2/support/api/api-antiplagiat/1383) от [advego.ru](https://advego.com/)
 
+## Требования
+Python 3.8+
+
 ## Установка
 
 

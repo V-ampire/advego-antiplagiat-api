@@ -1,3 +1,3 @@
 todo
 .env
-func_tests/*
+.pytest_cache/*
