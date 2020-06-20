@@ -2,3 +2,4 @@ todo
 .env
 .pytest_cache/*
 func_tests/*
+.editorconfig
