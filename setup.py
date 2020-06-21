@@ -32,7 +32,7 @@ about = {}
 if not VERSION:
 	package_name = 'antiplagiat'
 	with open(os.path.join(here, package_name, '__version__.py')) as fp:
-		exec(f.read(), about)
+		exec(fp.read(), about)
 else:
 	about['__version__'] = VERSION
 
