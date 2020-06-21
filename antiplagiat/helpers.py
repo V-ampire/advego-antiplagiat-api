@@ -1,5 +1,5 @@
 import json
-from typing import Dict, List, NamedTuple
+from typing import Dict, List, NamedTuple, Union
 
 
 def url_rule(url: str) -> str:
@@ -41,10 +41,10 @@ class Layer(NamedTuple):
 	"""
 	Найденное совпадение.
 	"""
-	rewrite: int
-	equality: int
+	rewrite: Union[int, None]
+	equality: Union[int, None]
 	words: List[str]
-	uri: str
+	uri: Union[str, None]
 	shingles: List[str]
 
 
@@ -52,10 +52,10 @@ class LayerByDomain(NamedTuple):
 	"""
 	Найденное совпадение на конкретном домене.
 	"""
-	rewrite: int
-	equality: int
+	rewrite: Union[int, None]
+	equality: Union[int, None]
 	layers: List[Layer]
-	domain: str
+	domain: Union[str, None]
 
 
 class AdvanceReport(object):
@@ -124,9 +124,9 @@ class AdvanceReport(object):
 			result.append(Layer(
 				rewrite=layer.get('rewrite'),
 				equality=layer.get('equality'),
-				words=self.words_by_numbers(layer.get('words')),
+				words=self.words_by_numbers(layer.get('words', [])),
 				uri=layer.get('uri'),
-				shingles=self.words_by_numbers(layer.get('shingles'))
+				shingles=self.words_by_numbers(layer.get('shingles', []))
 			))
 		return result
 
@@ -139,7 +139,7 @@ class AdvanceReport(object):
 			result.append(LayerByDomain(
 				rewrite=domain_layer.get('rewrite'),
 				equality=domain_layer.get('equality'),
-				layers=self.parse_layers(domain_layer.get('layers')),
+				layers=self.parse_layers(domain_layer.get('layers', [])),
 				domain=domain_layer.get('domain'),
 			))
 		return result

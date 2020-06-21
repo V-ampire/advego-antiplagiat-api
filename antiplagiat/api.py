@@ -1,6 +1,6 @@
 from itertools import count
 import requests
-from typing import Union, Dict, List
+from typing import Union, Dict, List, Optional, NoReturn
 
 from antiplagiat import exceptions
 from antiplagiat.helpers import clean_text
@@ -21,14 +21,14 @@ class Antiplagiat(object):
 		"""
 		self.token = token
 
-	def unique_text_add(self, text: str, title: str=None, ignore_rules: List[str]=None) -> Dict:
+	def unique_text_add(self, text: str, title: str=None, ignore_rules: Optional[List[str]]=None) -> Dict:
 		"""
 		Добавляет текст на проверку уникальности.
 		:param text: Текст, который нужно проверить;
 		:optional title: Название проверки;
 		:optional ignore_rules: Перечень правил, по которым будут игнорироваться сайты при проверки.
 		"""
-		params = {}
+		params = {} # type: Dict
 		params['text'] = clean_text(text)
 		if title:
 			params['title'] = title
@@ -71,7 +71,7 @@ class Antiplagiat(object):
 		"""
 		return self.process_rpc('', 'unique_get_text', {'key': key})
 
-	def process_rpc(self, url: str, method: str, params: Dict, headers=None) -> Dict:
+	def process_rpc(self, url: str, method: str, params: Dict, headers: Optional[Dict]=None) -> Dict:
 		if not headers:
 			headers = {}
 		headers['User-Agent'] = "Advego.Antiplagiat.API/Python"
@@ -89,7 +89,8 @@ class Antiplagiat(object):
 		if not result:
 			raise exceptions.APIException(f'Неизвестный формат ответа: {response}')
 		if isinstance(result, Dict) and result.get('error'):
-			self.raise_error(result.get('error'))
+			error = result['error'] # type: Union[str, int]
+			self.raise_error(error)
 		return result
 
 	def prepare_params(self, method: str, params: Dict) -> Dict:
@@ -102,7 +103,7 @@ class Antiplagiat(object):
 		params['token'] = self.token
 		return {"jsonrpc": "2.0", "method": method, "params": params, "id": id_ }
 
-	def raise_error(self, error_code: Union[str, int]):
+	def raise_error(self, error_code: Union[str, int]) -> NoReturn:
 		"""
 		Обработка ошибок от антиплагиата. Выбрасывает исключение соответствующее коду ошибки.
 		Если код не соответствует ниодной ошибке то выбрасывает APIException.
