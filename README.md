@@ -18,9 +18,10 @@ Python 3.8+
 
 ## Установка
 
-pip install advego-antiplagiat-api
-
-pipenv install advego-antiplagiat-api
+```
+$ pip install advego-antiplagiat-api
+$ pipenv install advego-antiplagiat-api
+```
 
 ## Пример использования
 ```
