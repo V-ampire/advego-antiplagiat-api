@@ -10,7 +10,6 @@ from setuptools import Command, find_packages, setup
 NAME = 'advego-antiplagiat-api'
 DESCRIPTION = 'Неофициальный клиент для работы с сервисом антиплагиата от advego.com.'
 URL = 'https://github.com/V-ampire/advego-antiplagiat-api'
-EMAIL = 'webjob010@gmail.com'
 AUTHOR = 'V-ampire'
 REQUIRES_PYTHON = '>=3.8.0'
 VERSION = None
